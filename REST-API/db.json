@@ -1,0 +1,44 @@
+[
+  {
+    "soura": "الفاتحة",
+    "souraEnglish": "Al-Fatiha",
+    "audio": "http://server7.mp3quran.net/basit/001.mp3",
+    "readername": "عبدالباسط عبدالصمد",
+    "readernameEngilsh": "Abdulbasit_abdulsamad",
+    "sort": "none"
+  },
+
+  {
+    "soura": "البقرة",
+    "souraEnglish": "Al-Bagarah",
+    "audio": "http://server7.mp3quran.net/basit/002.mp3",
+    "Readername": "عبدالباسط عبدالصمد",
+    "Readername": "Abdulbasit_abdulsamad",
+    "sort": "none"
+  },
+
+  {
+    "soura": "آل عمران",
+    "souraEnglish": "Al-Umraan",
+    "audio": "http://server7.mp3quran.net/basit/003.mp3",
+    "Readername": "عبدالباسط عبدالصمد",
+    "Readername": "Abdulbasit_abdulsamad",
+    "sort": "none"
+  },
+
+  {
+    "soura": "النساء",
+    "souraEnglish": "Al Nisaa",
+    "audio": "http://server7.mp3quran.net/basit/004.mp3",
+    "Readername": "عبدالباسط عبدالصمد",
+    "Readername": "Abdulbasit_abdulsamad",
+    "sort": "none"
+  }
+]
+
+
+INSERT INTO `Employee` (`soura`, `souraEnglish`, `audio`, `readername`, `readernameEngilsh`,`sort`) VALUES
+('الفاتحة', 'Al-Fatiha', 'http://server7.mp3quran.net/basit/001.mp3', 'عبدالباسط عبدالصمد', 'Abdulbasit_abdulsamad', 'none'),
+('البقرة', 'Al-Bagarah', 'http://server7.mp3quran.net/basit/002.mp3', 'عبدالباسط عبدالصمد', 'Abdulbasit_abdulsamad', 'none'),
+('آل عمران', 'Al-Umraan', 'http://server7.mp3quran.net/basit/003.mp3', 'عبدالباسط عبدالصمد', 'Abdulbasit_abdulsamad', 'none'),
+('النساء', 'Al Nisaa', 'http://server7.mp3quran.net/basit/004.mp3', 'عبدالباسط عبدالصمد', 'Abdulbasit_abdulsamad', 'none');
