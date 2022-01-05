@@ -2,7 +2,7 @@
 
 ob_start();
 
-$API_KEY = "5019776526:AAEiZiHrfvICr6vcoNfv40rkLzUXYXLqRsQ";
+$API_KEY = "";
 $site = "https://api-quran.cf";
 
 define("API_KEY",$API_KEY);
@@ -26,8 +26,7 @@ $getjson = json_decode(file_get_contents("save.txt"));
 $user = $getjson->$id;
 $save = $user->save;
 
-$sour = array("الوجه001","الوجه002","الوجه003","الوجه004","الوجه005","الوجه006","الوجه007","الوجه008","الوجه009","الوجه010","الوجه011","الوجه012","الوجه013","الوجه014","الوجه015","الوجه016","الوجه017","الوجه018","الوجه019","الوجه020","الوجه021","الوجه022","الوجه023","الوجه024","الوجه025","الوجه026","الوجه027","الوجه028","الوجه029","الوجه030","الوجه021","الوجه042","الوجه043","الوجه044","الوجه045","الوجه046","الوجه047","الوجه048","الوجه049","الوجه050",);
-
+$sour = array("الوجه001","الوجه002","الوجه003","عودة");
 
 // Search audio
 
@@ -91,7 +90,7 @@ if(in_array($text,$sound)){
   }
   bot("sendMessage",[
     "chat_id"=>$chat_id,
-    "text"=>"تم إختيار القارئ ، قم الآن بكتابة الصفحة أو قم بالإختيار من الكيبورد في الاسفل.",
+    "text"=>"تم إختيار القارئ ، قم الآن بكتابة الصوحة أو قم بالإختيار من الكيبورد في الاسفل.",
     "reply_to_message_id"=>$message_id,
     "reply_markup"=>json_encode([
       'keyboard'=>$keyboard
@@ -102,7 +101,7 @@ if(in_array($text,$sound)){
 
 
 if(in_array($save,$soundafter)){
-  $get = json_decode(file_get_contents("http://api-abaquran.aba.vg/handler.php?soura=".urlencode($text)."&readernameEngilsh=Al_husari"));
+  $get = json_decode(file_get_contents("http://api-abaquran.aba.vg/handler.php?text=".urlencode($text)."&readernameEngilsh=Al_husari"));
   if(isset($get->error)){
     bot("sendMessage",[
       "chat_id"=>$chat_id,
