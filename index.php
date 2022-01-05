@@ -213,7 +213,7 @@ if(in_array($text,$sound)){
 
 
 if(in_array($save,$soundafter)){
-  $get = file_get_contents("http://api-abaquran.aba.vg/handler.php?soura=".urlencode($text)."&readernameEngilsh=".$saveafter);
+  $get = file_get_contents("http://api-abaquran.aba.vg/handler.php?soura=".urlencode($text)."&readernameEngilsh=".$save);
   $ob = json_decode($get);
   if(isset($get->error)){
     bot("sendMessage",[
