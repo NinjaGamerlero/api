@@ -138,7 +138,7 @@ if(in_array($text,$write)){
 }
 
 if(in_array($save,$writeafter)){
-  $get = json_decode(file_get_contents("https://api-islamic.cf/quransql/index.php?text=".urlencode($text)."&type=".$save))->result;
+  $get = json_decode(file_get_contents("https://api-islamic.cf/quransql/index.php?text="$text."&type=".$save))->result;
   $count = count($get);
   bot("sendMessage",[
     "chat_id"=>$chat_id,
