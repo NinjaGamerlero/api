@@ -32,7 +32,7 @@ $text = $message->text;
 $message_id = $message->message_id;
 
 if($text){
-$url = file_get_contents("http://api-abaquran.aba.vg/handler.php?soura=&readernameEngilsh=Al_husari");
+$url = file_get_contents("http://api-abaquran.aba.vg/handler.php?soura=$text&readernameEngilsh=Al_husari");
    
 bot('sendMessage',[
 'chat_id'=>$chat_id,
