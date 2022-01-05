@@ -201,10 +201,10 @@ if(in_array($text,$sound)){
 
 if(in_array($save,$soundafter)){
   $url = json_decode(file_get_contents("http://api-abaquran.aba.vg/handler.php?soura=".urlencode($text)."&readernameEngilsh=".$save));
-  if(isset($get->error)){
+  if(isset($url->error)){
     bot("sendMessage",[
       "chat_id"=>$chat_id,
-      "text"=>$get->error,
+      "text"=>$url->error,
       "reply_to_message_id"=>$message_id,
   ]);
   return;
@@ -212,7 +212,7 @@ if(in_array($save,$soundafter)){
    $ob = json_decode($url);
   bot("sendAudio",[
       "chat_id"=>$chat_id,
-      "audio"=>audio,
+      "audio"=>$url->audio,
       "reply_to_message_id"=>$message_id,
   ]);
   return;
