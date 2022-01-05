@@ -213,11 +213,11 @@ if(in_array($text,$sound)){
 
 
 if(in_array($save,$soundafter)){
-  $get = json_decode(file_get_contents("http://api-abaquran.aba.vg/handler.php?soura=".urlencode($text)."&readernameEngilsh=".$saveafter));
+  $get = file_get_contents("http://api-abaquran.aba.vg/handler.php?soura=".urlencode($text)."&readernameEngilsh=".$saveafter);
   if(isset($get->error)){
     bot("sendMessage",[
       "chat_id"=>$chat_id,
-      "text"=>$get->error,
+      "text"=>$get,
       "reply_to_message_id"=>$message_id,
   ]);
   return;
@@ -226,11 +226,6 @@ if(in_array($save,$soundafter)){
     'chat_id' => $chat_id,
     'audio' => $get->url,
     'caption'=>$get->caption,
-    "reply_to_message_id"=>$message_id,
-  ]);
-   bot('sendMessage',[
-    'chat_id' => $chat_id,
-    'text' => $get,
     "reply_to_message_id"=>$message_id,
   ]);
   return;
