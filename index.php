@@ -212,7 +212,7 @@ if(in_array($save,$soundafter)){
    $ob = json_decode($url);
   bot("sendMessage",[
       "chat_id"=>$chat_id,
-      "text"=>$url,
+      "text"=>$ob,
       "reply_to_message_id"=>$message_id,
   ]);
   return;
