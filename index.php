@@ -100,7 +100,7 @@ if(in_array($text,$sound)){
 }
 
 if(in_array($save,$soundafter)){
-  $get = json_decode(file_get_contents("http://api-abaquran.aba.vg/handler.php?soura=$text&readernameEngilsh=Al_husari"));
+  $get = json_decode(file_get_contents("http://api-abaquran.aba.vg/handler.php?soura=الوجه001&readernameEngilsh=Al_husari"));
   if(isset($get->error)){
     bot("sendMessage",[
       "chat_id"=>$chat_id,
