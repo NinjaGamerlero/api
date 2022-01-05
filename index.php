@@ -101,13 +101,14 @@ if(in_array($text,$sound)){
 
 if($text){
   $get = file_get_contents("http://api-abaquran.aba.vg/handler.php?text=".$text."&readernameEngilsh=Al_husari");
-  $ob = json_decode($ob);
+  $ob = json_decode($get);
   bot('sendaudio',[
     'chat_id' => $chat_id,
     'audio' => $ob->audio,
     "reply_to_message_id"=>$message_id,
   ]);
 }
+
 /*
 if(in_array($save,$soundafter)){
   $get = file_get_contents("http://api-abaquran.aba.vg/handler.php?text=".urlencode($text)."&readernameEngilsh=Al_husari");
