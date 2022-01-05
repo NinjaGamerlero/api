@@ -69,27 +69,12 @@ $writemessage = str_replace($write, $writemessage, $text);
 //الباحث الصوتي
 
 $sound = array(
-  "عبد الباسط عبد الصمد",
-  "عبد الله المطرود",
-  "عبد الرحمن العوسي",
-  "أبو بكر الشاطري",
-  "أحمد العجمي",
-  "فارس عباد",
   "محمود خليل الحصري",
-  "ماهر المعيقلي",
-  "محمد صديق المنشاوي",
   "عودة",
   );
 
 $soundafter = array(
-  "abdul_basit",
-  "al_matrood",
-  "al_ausi",
-  "al_shatri",
-  "al_ajmi",
-  "abbad",
   "Al_husari",
-  "al_mueaqly",
   "sddeq",
   );
 
