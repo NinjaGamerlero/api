@@ -2,7 +2,7 @@
 
 ob_start();
 
-$API_KEY = "";
+$API_KEY = "5019776526:AAEiZiHrfvICr6vcoNfv40rkLzUXYXLqRsQ";
 $site = "https://api-quran.cf";
 
 define("API_KEY",$API_KEY);
