@@ -1,13 +1,13 @@
 <?php
 
-/*
+/*  
     * ملف بوت الباحث القرآني
     * الإصدار الرابع
     * الجديد  :
-    تم إضافة باحث صوتي
+    تم إضافة باحث صوتي 
     ل 9 من القراء
-
-    تمت برمجة هذه المشروع
+    
+    تمت برمجة هذه المشروع 
     من قبل فريق
     @api_tele
 */
@@ -15,7 +15,7 @@
 ob_start();
 
 $API_KEY = "5019776526:AAEiZiHrfvICr6vcoNfv40rkLzUXYXLqRsQ"; //your token bot
-$site = "www.api-quran.cf";
+$site = "https://api-quran.cf";
 
 define("API_KEY",$API_KEY);
 function bot($method,$str=[]){
@@ -32,15 +32,13 @@ $chat_id = $message->chat->id;
 $text = $message->text;
 $message_id = $message->message_id;
 
-
 $json = json_decode(file_get_contents("save.txt"),true);
 $getjson = json_decode(file_get_contents("save.txt"));
 
 $user = $getjson->$id;
 $save = $user->save;
 
-$sour = array("الوجه001","الوجه002","الوجه003","الوجه004","الوجه005","الوجه006","الوجه007","الوجه008","الوجه009","الوجه010","الوجه011","الوجه012","الوجه013","الوجه014","الوجه015","الوجه016","الوجه017","الوجه018","الوجه019","الوجه020","الوجه021","الوجه022","الوجه023","الوجه024","الوجه025","الوجه026","الوجه027","الوجه028","الوجه029","الوجه030","الوجه031","الوجه032","الوجه033","الوجه034","الوجه035","الوجه036","الوجه037","الوجه038","الوجه039","الوجه040",
-);
+$sour = array("عودة","الفاتحة","البقرة","آل عمران","النساء","المائدة","الأنعام","الأعراف","الأنفال","التوبة","يونس","هود","يوسف","الرعد","ابراهيم","الحجر","النحل","الإسراء","الكهف","مريم","طه","الأنبياء","الحج","المؤمنون","النور","الفرقان","الشعراء","النمل","القصص","العنكبوت","الروم","لقمان","السجدة","الأحزاب","سبإ","فاطر","يس","الصافات","ص","الزمر","غافر","فصلت","الشورى","الزخرف","الدخان","الجاثية","الأحقاف","محمد","الفتح","الحجرات","ق","الذاريات","الطور","النجم","القمر","الرحمن","الواقعة","الحديد","المجادلة","الحشر","الممتحنة","الصف","الجمعة","المنافقون","التغابن","الطلاق","التحريم","الملك","القلم","الحاقة","المعارج","نوح","الجن","المزمل","المدثر","القيامة","الانسان","المرسلات","النبإ","النازعات","عبس","التكوير","الإنفطار","المطففين","الإنشقاق","البروج","الطارق","الأعلى","الغاشية","الفجر","البلد","الشمس","الليل","الضحى","الشرح","التين","العلق","القدر","البينة","الزلزلة","العاديات","القارعة","التكاثر","العصر","الهمزة","الفيل","قريش","الماعون","الكوثر","الكافرون","النصر","المسد","الإخلاص","الفلق","الناس");
 
 //الباحث النصي
 $write = array(
@@ -69,15 +67,30 @@ $writemessage = str_replace($write, $writemessage, $text);
 //الباحث الصوتي
 
 $sound = array(
+  "عبد الباسط عبد الصمد",
+  "عبد الله المطرود",
+  "عبد الرحمن العوسي",
+  "أبو بكر الشاطري",
+  "أحمد العجمي",
+  "فارس عباد",
   "محمود خليل الحصري",
+  "ماهر المعيقلي",
+  "محمد صديق المنشاوي",
   "عودة",
   );
 
 $soundafter = array(
-  "Al_husari",
+  "abdul_basit",
+  "al_matrood",
+  "al_ausi",
+  "al_shatri",
+  "al_ajmi",
+  "abbad",
+  "al_husori",
+  "al_mueaqly",
   "sddeq",
   );
-
+  
 $soundsave = str_replace($sound, $soundafter, $text);
 
 //start
@@ -93,11 +106,11 @@ if($text == "/start" or $text == "عودة"){
     ".$site,
     "reply_to_message_id"=>$message_id,
     "reply_markup"=>json_encode([
-      "keyboard"=>[
-          [["text"=>"الباحث النصي"]],
-          [["text"=>"الباحث الصوتي"]],
+      'keyboard'=>[
+          [['text'=>'الباحث النصي']],
+          [['text'=>'الباحث الصوتي']],
         ],
-        "resize_keyboard"=>true
+        'resize_keyboard'=>true
     ]),
   ]);
   return;
@@ -119,7 +132,7 @@ if($text == "الباحث النصي"){
     ".$site,
     "reply_to_message_id"=>$message_id,
     "reply_markup"=>json_encode([
-      "keyboard"=>$keyboard
+      'keyboard'=>$keyboard
     ])
   ]);
   return;
@@ -138,7 +151,7 @@ if(in_array($text,$write)){
 }
 
 if(in_array($save,$writeafter)){
-  $get = json_decode(file_get_contents("https://api-islamic.cf/quransql/index.php?text="$text."&type=".$save))->result;
+  $get = json_decode(file_get_contents("https://api-quran.cf/quransql/index.php?text=".urlencode($text)."&type=".$save))->result;
   $count = count($get);
   bot("sendMessage",[
     "chat_id"=>$chat_id,
@@ -174,7 +187,7 @@ if($text == "الباحث الصوتي"){
     ",
     "reply_to_message_id"=>$message_id,
     "reply_markup"=>json_encode([
-      "keyboard"=>$keyboard
+      'keyboard'=>$keyboard
     ])
   ]);
   return;
@@ -191,7 +204,7 @@ if(in_array($text,$sound)){
     "text"=>"تم إختيار القارئ ، قم الآن بكتابة اسم السورة أو قم بالإختيار من الكيبورد في الاسفل..",
     "reply_to_message_id"=>$message_id,
     "reply_markup"=>json_encode([
-      "keyboard"=>$keyboard
+      'keyboard'=>$keyboard
     ])
   ]);
   return;
@@ -200,19 +213,19 @@ if(in_array($text,$sound)){
 
 
 if(in_array($save,$soundafter)){
-  $url = json_decode(file_get_contents("http://api-abaquran.aba.vg/handler.php?soura=".urlencode($text)."&readernameEngilsh=".$save));
-  if(isset($url->error)){
+  $get = json_decode(file_get_contents("http://api-abaquran.aba.vg/handler.php?soura=".urlencode($text)."&readernameEngilsh=".$save));
+  if(isset($get->error)){
     bot("sendMessage",[
       "chat_id"=>$chat_id,
-      "text"=>$url->error,
+      "text"=>$get->error,
       "reply_to_message_id"=>$message_id,
   ]);
   return;
   }
-   $ob = json_decode($url);
-   bot('sendMessage',[
+  bot('sendaudio',[
     'chat_id' => $chat_id,
-    'text' => $url,
+    'audio' => $get->url,
+    'caption'=>$get->caption,
     "reply_to_message_id"=>$message_id,
   ]);
   return;
@@ -224,7 +237,7 @@ if($message){
   bot("sendMessage",[
     "chat_id"=>$chat_id,
     "text"=>"
-لم أتمكن من فهم هذا الأمر ، يرجى إرسال
+لم أتمكن من فهم هذا الأمر ، يرجى إرسال 
 
 /start
     ",
@@ -232,14 +245,14 @@ if($message){
   ]);
 }
 
-/*
+/*  
     * ملف بوت الباحث القرآني
     * الإصدار الرابع
     * الجديد  :
-    تم إضافة باحث صوتي
+    تم إضافة باحث صوتي 
     ل 9 من القراء
-
-    تمت برمجة هذه المشروع
+    
+    تمت برمجة هذه المشروع 
     من قبل فريق
     @api_tele
 */
