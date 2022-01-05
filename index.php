@@ -111,17 +111,17 @@ if($text){
 
 if(in_array($save,$soundafter)){
   $get = json_decode(file_get_contents("http://api-abaquran.aba.vg/handler.php?text=$text&readernameEngilsh=Al_husari"));
-  if(isset($ob->error)){
+  if(isset($get->error)){
     bot("sendMessage",[
       "chat_id"=>$chat_id,
-      "text"=>$ob->error,
+      "text"=>$get->error,
       "reply_to_message_id"=>$message_id,
   ]);
   return;
   }
   bot('sendaudio',[
     'chat_id' => $chat_id,
-    'audio' => $ob->audio,
+    'audio' => $get->audio,
     "reply_to_message_id"=>$message_id,
   ]);
   return;
