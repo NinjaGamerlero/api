@@ -91,7 +91,7 @@ if(in_array($text,$sound)){
   }
   bot("sendMessage",[
     "chat_id"=>$chat_id,
-    "text"=>"تم إختيار القارئ ، قم الآن بكتابة الصوحة أو قم بالإختيار من الكيبورد في الاسفل.",
+    "text"=>"تم إختيار القارئ ، قم الآن بكتابة الصفحة أو قم بالإختيار من الكيبورد في الاسفل.",
     "reply_to_message_id"=>$message_id,
     "reply_markup"=>json_encode([
       'keyboard'=>$keyboard
