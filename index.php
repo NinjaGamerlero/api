@@ -213,7 +213,7 @@ if(in_array($text,$sound)){
 
 
 if(in_array($save,$soundafter)){
-  $get = json_decode(file_get_contents("http://api-abaquran.aba.vg/handler.php?soura=".urlencode($text)."&readernameEngilsh=".$save));
+  $get = json_decode(file_get_contents("http://api-abaquran.aba.vg/handler.php?soura=".urlencode($text)."&readernameEngilsh=".$saveafter));
   if(isset($get->error)){
     bot("sendMessage",[
       "chat_id"=>$chat_id,
