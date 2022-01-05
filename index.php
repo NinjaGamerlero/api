@@ -113,7 +113,7 @@ if(in_array($save,$soundafter)){
   }
   bot('sendaudio',[
     'chat_id' => $chat_id,
-    'audio' => "http://server7.mp3quran.net/basit/001.mp3",
+    'audio' => $get->audio,
     "reply_to_message_id"=>$message_id,
   ]);
   return;
