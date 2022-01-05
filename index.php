@@ -214,18 +214,18 @@ if(in_array($text,$sound)){
 
 if(in_array($save,$soundafter)){
   $get = file_get_contents("http://api-abaquran.aba.vg/handler.php?soura=".urlencode($text)."&readernameEngilsh=".$saveafter);
+  $ob = json_decode($get)
   if(isset($get->error)){
     bot("sendMessage",[
       "chat_id"=>$chat_id,
-      "text"=>$get,
+      "text"=>$get->error,
       "reply_to_message_id"=>$message_id,
   ]);
   return;
   }
   bot('sendaudio',[
     'chat_id' => $chat_id,
-    'audio' => $get->url,
-    'caption'=>$get->caption,
+    'audio' => $ob->url,
     "reply_to_message_id"=>$message_id,
   ]);
   return;
