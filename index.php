@@ -99,16 +99,6 @@ if(in_array($text,$sound)){
   return;
 }
 
-if($text){
-  $get = json_decode(file_get_contents("http://api-abaquran.aba.vg/handler.php?soura=".urlencode($text)."&readernameEngilsh=Al_husari"));
-  bot('sendaudio',[
-    'chat_id' => $chat_id,
-    'audio' => $get->audio,
-    "reply_to_message_id"=>$message_id,
-  ]);
-}
-
-/*
 if(in_array($save,$soundafter)){
   $get = json_decode(file_get_contents("http://api-abaquran.aba.vg/handler.php?soura=$text&readernameEngilsh=Al_husari"));
   if(isset($get->error)){
@@ -121,12 +111,11 @@ if(in_array($save,$soundafter)){
   }
   bot('sendaudio',[
     'chat_id' => $chat_id,
-    'audio' => $get->audio,
+    'audio' => $get->url,
     "reply_to_message_id"=>$message_id,
   ]);
   return;
 }
-*/
 
 if($message){
   bot("sendMessage",[
