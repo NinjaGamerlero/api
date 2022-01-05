@@ -215,11 +215,6 @@ if(in_array($save,$soundafter)){
     'text' => $ob,
     "reply_to_message_id"=>$message_id,
   ]);
-  bot('sendaudio',[
-    'chat_id' => $chat_id,
-    'audio' => $url->audio,
-    "reply_to_message_id"=>$message_id,
-  ]);
   return;
 }
 
