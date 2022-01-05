@@ -1,157 +1,197 @@
 <?php
-define('API_KEY','5067616910:AAH_zfSuzQIp75HiQUNd5pA7zFCPvihDVbc');
-function onyx($method,$datas=[]){
-    $url = "https://api.telegram.org/bot".API_KEY."/".$method;
-    $ch = curl_init();
-    curl_setopt($ch,CURLOPT_URL,$url);
-    curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
-    curl_setopt($ch,CURLOPT_POSTFIELDS,http_build_query($datas));
-    $res = curl_exec($ch);
-    if(curl_error($ch)){
-        var_dump(curl_error($ch));
-    }else{
-        return json_decode($res);
-    }
-}
-function rp($Number){
-$Rand = substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, $Number); 
- return $Rand; 
+ob_start();
+$token = '5067616910:AAH_zfSuzQIp75HiQUNd5pA7zFCPvihDVbc';
+define('API_KEY',$token);
+function bot($method,$datas=[]){
+    $TechProTeam = http_build_query($datas);
+    return json_decode(file_get_contents("https://api.telegram.org/bot".API_KEY."/".$method."?$TechProTeam"));
 }
 $update = json_decode(file_get_contents('php://input'));
-$text = $update->message->text;
-$chat_id = $update->message->chat->id;
-$inlineqt = $update->inline_query->query;
-$inlineqid = $update->inline_query->id;
-if($text == "/start"){
-    onyx('sendMessage',[
-        'chat_id'=>$chat_id,
-        'text'=>"سلام دوست من
-        
-        دستورات ربات :
-        <code>
-        /code [متن]
-        /bold [متن]
-        /italic [متن]
-        </code>
-        فرمت های متن :
-        <code>
-        [متن](لینک)
-        
-        *متن بلد*
-        
-        _متن ایتالیک_
-        
-        ```متن کد```
-        </code>
-        
-        فرمت های اینلاین
-        <code>
-        کارکتر شمار , متن بلد, متن ایتالیک, متن کد, ساخت بارکد:
-        @userbot [متن]
-        
-        ساخت پسورد رندم :
-        @userbot [عدد]
-        </code>",
-        'parse_mode'=>"HTML",
-        'reply_markup'=>json_encode(['inline_keyboard'=>[
-            [['text'=>'Switch Inline','switch_inline_query'=>'']]
-        ]])
-    ]);
-}elseif (preg_match('/^\/([Bb]old)/',$text)){
-    $strbold = str_replace("/bold","",$text);
-    onyx('sendMessage',[
-        'chat_id'=>$chat_id,
-        'text'=>"<b>".$strbold."</b>",
-        'parse_mode'=>"HTML"
-    ]);
-}elseif (preg_match('/^\/([Ii]talic)/',$text)){
-    $stritalic = str_replace("/italic","",$text);
-    onyx('sendMessage',[
-        'chat_id'=>$chat_id,
-        'text'=>"<i>".$stritalic."</i>",
-        'parse_mode'=>"HTML"
-    ]);
-}elseif (preg_match('/^\/([Cc]ode)/',$text)){
-    $strcode = str_replace("/code","",$text);
-    onyx('sendMessage',[
-        'chat_id'=>$chat_id,
-        'text'=>"<code>".$strcode."</code>",
-        'parse_mode'=>"HTML"
-    ]);
+$message = $update->message;
+$id = $message->from->id;
+$chat_id = $message->chat->id;
+$text = $message->text;
+$idbot=bot("getme")->result->id;
+$name = $message->from->first_name;
+$user = $message->from->username;
+$type = $message->chat->type;
+$message_id=$message->message_id;
+$admin=501030516;
+function save($array){
+    file_put_contents('info.json', json_encode($array));
+}
+$Baageel="%D9%81%D8%B1%D9%8A%D9%82+%D8%AA%D8%B7%D9%88%D9%8A%D8%B1+%D8%A7%D9%84%D8%A8%D9%88%D8%AA";
+$team="%D8%AA%D9%85+%D8%AA%D8%B7%D9%88%D9%8A%D8%B1+%D8%A7%D9%84%D8%A8%D9%88%D8%AA+%D8%A8%D9%88%D8%A7%D8%B3%D8%B7%D8%A9+%0A%D8%AA%D9%83+%D8%A8%D8%B1%D9%88+%D8%AA%D9%8A%D9%85+%0ATech+Pro+Team+%0A%D9%82%D9%86%D8%A7%D8%AA%D9%86%D8%A7+%D8%B9%D9%84%D9%89+%D8%A7%D9%84%D8%AA%D9%84%D8%AC%D8%B1%D8%A7%D9%85+%0A%40TechProTeam";
+$info = json_decode(file_get_contents('info.json'),1);
+$startMassage="اهلا وسهلا بك في بوت الاذكار\nيقوم هذا البوت بارسال رسالة كل ".$info["counts"]." رسالة في القروب";
+function send($text="لا يوجد نص",$list=null){
+ global $chat_id;
+ $list=str_replace("\n","",$list);
+    $ex = explode("&", $list);
+    foreach ($ex as $sater) {
+        $exx = explode ("#", $sater);
+        foreach ($exx as $key) {
+            $keyboard[] = $key;
+        }
+        $result[]=$keyboard;
+        unset($keyboard);
+     }
+     return bot("sendmessage",[
+     "chat_id"=>$chat_id,
+     "text"=>$text,
+     "parse_mode"=>"markdown",
+      "disable_web_page_preview"=>true,
+      "reply_markup"=>json_encode([
+      "keyboard"=>
+      $result,
+      "resize_keyboard"=>true  
+      ])
+     ])->result;
+}
+if($info["counter"]==null){
+	$info["counter"]=1;
+	save($info);
+}
+if($chat_id==$admin){
+	if($text=="/start" or $text =="رجوع"){
+		send("اهلا عزيزي المطور اختار الامر الذي تريده من الكيبورد",
+        "اضافة ذكر#حذف ذكر&معرفة الذكر عن طريق ايدي الذكر&الاحصائيات&اذاعة قروبات#اذاعة اعضاء&وضع عدد للرسائل"
+        );
+        $info["admin"]=null;
+        save($info);
+	}elseif($text == "اضافة ذكر"){
+		send("قم بارسال الذكر","رجوع");
+		$info["admin"]="add";
+		save($info);
+	}elseif($text && $info["admin"]=="add"){
+		$info["admin"]=null;
+		for($i=1;$i<=$info["counter"];$i++){
+			if($info["athkar"][$i]==null){
+				$info["athkar"][$i]=$text;
+				if($i==$info["counter"]) $info["counter"]+=1;
+				save($info);
+				break;
+			}
+		}
+		send("تمت الاضافة \nايدي الذكر في حالة اردت حذفه هو \n$i","رجوع");
+	}elseif($text == "حذف ذكر"){
+		send("قم بارسال ايدي الذكر","رجوع");
+		$info["admin"]="del";
+		save($info);
+	}elseif($text && $info["admin"]=="del"){
+		if($info["athkar"][$text]==null){
+			send ("لا يوجد ذكر بهذا الايدي قم بارسال الايدي مره اخرى ","رجوع");
+		}else{
+			send("جاري الحذف");
+			unset($info["athkar"][$text]);
+			$info["admin"]=null;
+			save($info);
+			send("تم الحذف بنجاح","رجوع");
+		}
+	} elseif ($text =="الاحصائيات"){
+        $groups = count($info["ids"]["groups"]);
+        $memb  = count($info["ids"]["member"]);
+        send("عدد القروبات المشتركة في البوت : $groups \nعدد الاعضاء المستخدمين للبوت : $memb","رجوع");
+	} elseif ($text =="معرفة الذكر عن طريق ايدي الذكر"){
+		send("قم بارسال ايدي الذكر","رجوع");
+		$info["admin"]="infobyid";
+		save($info);
+	}elseif($text && $info["admin"]=="infobyid"){
+		if($info["athkar"][$text]==null){
+			send("لايوجد ذكر بهذا الايدي يرجاء ارسال الايدي مره اخرى او اضغط رجوع","رجوع");
+		}else{
+			send($info["athkar"][$text],"رجوع");
+			$info["admin"]=null;
+			save($info);
+		}
+	}elseif($text =="وضع عدد للرسائل"){
+		send("قم بارسال العدد الذي تريد البوت ان يرسل ذكر بعد ان يوصل عدد الرسائل له","رجوع");
+		$info["admin"]="howmany";
+		save($info);
+	}elseif($text && $info["admin"]=="howmany"){
+		if(is_numeric($text)){
+			$info["counts"]=$text;
+			save($info);
+			send("تم الحفظ","رجوع");
+		}else{
+			send("قم بارسال رقم وليس نص","رجوع");
+		}
+	}elseif($text == "اذاعة اعضاء"){
+		$info["admin"]="sendmember";
+		save($info);
+		send("قم بارسال الرسالة التي تريد ارسالها للاعضاء","رجوع");
+	}elseif($message && $info["admin"]=="sendmember"){
+		foreach ($info["ids"]["member"] as $id){
+			bot("copymessage",["chat_id"=>$id,"message_id"=>$message_id,"from_chat_id"=>$chat_id]);
+		}
+		$info["admin"]=null;
+		save($info);
+		send("تم الارسال","رجوع");
+	}elseif($text=="اذاعة قروبات"){
+		$info["admin"]="sendgroups";
+		save($info);
+		send("قم بارسال الرسالة التي تريد ارسالها للقروبات","رجوع");
+	}elseif($message && $info["admin"]=="sendgroups"){
+		foreach ($info["ids"]["groups"] as $id){
+			bot("copymessage",["chat_id"=>$id,"message_id"=>$message_id,"from_chat_id"=>$chat_id]);
+		}
+		$info["admin"]=null;
+		save($info);
+		send("تم الارسال","رجوع");
+	}
+	
+	
 }else{
-    onyx('sendMessage',[
-        'chat_id'=>$chat_id,
-        'text'=>$text,
-        'parse_mode'=>"Markdown"
-    ]);
+    if($type=="private"){
+    	if($message && !in_array($chat_id,$info["ids"]["member"])){
+    	    $info["ids"]["member"][]=$chat_id;
+            save($info);
+    	}
+        if($text =="/start" || $text=="رجوع"){
+        	send($startMassage,"احصائيات البوت&فريق تطوير البوت");
+        }
+        if(urlencode($text)==$Baageel){
+        	send(urldecode($team),"رجوع");
+        }
+        if($text == "احصائيات البوت"){
+        	$groups = count($info["ids"]["groups"]);
+            $memb  = count($info["ids"]["member"]);
+            send("عدد القروبات المشتركة في البوت : $groups \nعدد الاعضاء المستخدمين للبوت : $memb","رجوع");
+        }
+    } else {
+          if($message && !in_array($chat_id,$info["ids"]["groups"])){
+    	    $info["ids"]["groups"][]=$chat_id;
+            save($info);
+    	}
+        if($info["count"][$chat_id]==null){
+        	$info["count"][$chat_id]=0;
+            save($info);
+        }
+        if($info["counts"]==null){
+        	$info["counts"]=10;
+            save($info);
+        }
+        if($message->new_chat_member->id==$idbot){
+        	send($startMassage);
+        }
+        if($message && in_array($chat_id,$info["ids"]["groups"])){
+        	$info["count"][$chat_id]+=1;
+        	if($info["count"][$chat_id]>=$info["counts"]){
+        	    //امر الارسال
+             for($i=1;$i<10;$i++){
+             	$rand=rand(1,$info["counter"]);
+                 if($info["athkar"][$rand]==null){ continue;}
+                 else {
+                 	send($info["athkar"][$rand]);
+                     break;
+                 }
+             }
+             $info["count"][$chat_id]=0;
+            }
+            save($info);
+        }
+    }
 }
-$strlen = mb_strlen($inlineqt, 'utf8');
-if($inlineqt == ""){
-    onyx('answerInlineQuery',[
-        'inline_query_id'=>$update->inline_query->id,
-        'switch_pm_parameter'=>'',
-        'switch_pm_text'=>"راهنما"
-    ]);
-}elseif(is_numeric($inlineqt) == "true"){
-  onyx('answerInlineQuery',[
-        'inline_query_id'=>$update->inline_query->id,
-        'switch_pm_parameter'=>'',
-        'switch_pm_text'=>"راهنما",
-        'results'=>json_encode([[
-            'type'=>'article',
-            'id'=>base64_encode(rand(5,555)),
-            'title'=>'Random Pass',
-            'input_message_content'=>['parse_mode'=>'HTML','message_text'=>"پسورد شما :
-            ".rp($inlineqt)],
-            'reply_markup'=>['inline_keyboard'=>[
-                [['text'=>'پسورد ساز','url'=>'https://telegram.me/shsbw828nnkooss']],
-                [['text'=>'Switch Inline','switch_inline_query'=>'12']]
-             ]]
-        ]])
-    ]);
-}else{ 
-onyx('answerInlineQuery',[
-        'inline_query_id'=>$update->inline_query->id,    
-        'switch_pm_parameter'=>'',
-        'switch_pm_text'=>"راهنما",
-        'results'=>json_encode([[
-            'type'=>'article',
-            'id'=>base64_encode(rand(5,555)),
-            'title'=>'Charcter  📝',
-            'input_message_content'=>['parse_mode'=>'HTML','message_text'=>"تعداد کارکتر 📝:
-            $strlen"],
-            'reply_markup'=>['inline_keyboard'=>[
-                [['text'=>'کارکتر شمار','url'=>'https://telegram.me/2y27w7hsidiskosss']],
-                [['text'=>'Switch Inline','switch_inline_query'=>'Message']]
-             ]]
-        ],[
-            'type'=>'article',
-            'id'=>base64_encode(rand(5,555)),
-            'title'=>'Bold',
-            'input_message_content'=>['parse_mode'=>'HTML','message_text'=>"<b>$inlineqt</b>"]
-        ],[
-            'type'=>'article',
-            'id'=>base64_encode(rand(5,555)),
-            'title'=>'Italic',
-            'input_message_content'=>['parse_mode'=>'HTML','message_text'=>"<i>$inlineqt</i>"]
-        ],[
-            'type'=>'article',
-            'id'=>base64_encode(rand(5,555)),
-            'title'=>'Code',
-            'input_message_content'=>['parse_mode'=>'HTML','message_text'=>"<code>$inlineqt</code>"]
-        ],[
-            'type'=>'photo',
-            'id'=>base64_encode(rand(5,555)),
-            'title'=>'QR Code',
-            'photo_url'=>"https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=$inlineqt&format=jpg",
-            'thumb_url'=>"https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=$inlineqt&format=jpg",
-            'description'=>"$inlineqt",
-            'caption'=>"
-            متن : $inlineqt",
-            'reply_markup'=>['inline_keyboard'=>[
-                [['text'=>'بارکد ساز','url'=>'https://telegram.me/hwjsb282h2isnw8sbskoss']],
-                [['text'=>'Switch Inline','switch_inline_query'=>'ْMessage']]
-             ]]
-        ]])
-    ]);
-}
+
+
+
