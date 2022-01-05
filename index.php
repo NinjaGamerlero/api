@@ -1,30 +1,11 @@
-﻿<?php
-ob_start();
+<?php
 define('API_KEY','5067616910:AAH_zfSuzQIp75HiQUNd5pA7zFCPvihDVbc');
-$admin = 1146757768;
-$update = json_decode(file_get_contents('php://input'));
-$from_id = $update->message->from->id;
-$name = $update->message->from->first_name;
-$chat_id = $update->message->chat->id;
-$chatid = $update->callback_query->message->chat->id;
-$data = $update->callback_query->data;
-$text = $update->message->text;
-$message_id = $update->callback_query->message->message_id;
-$message_id_feed = $update->message->message_id;
-$time = file_get_contents("http://api.mgataplus.tk/Time");
-$date = file_get_contents("http://api.mgataplus.tk/Date");
-$jock = file_get_contents("http://api.mgataplus.tk/Jock");
-$hadis = file_get_contents("http://Sherimusic.ir/hadis.php");
-$fal = file_get_contents("https://apio.a7n.ir/falhafez");
-$pass = file_get_contents("https://goldtm.teleagent.ir/passrandom");
-$am = file_get_contents("http://Sherimusic.ir/midanid.php");
-$al = file_get_contents("al.txt");
-function coding($method,$datas=[]){
+function onyx($method,$datas=[]){
     $url = "https://api.telegram.org/bot".API_KEY."/".$method;
     $ch = curl_init();
     curl_setopt($ch,CURLOPT_URL,$url);
     curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
-    curl_setopt($ch,CURLOPT_POSTFIELDS,$datas);
+    curl_setopt($ch,CURLOPT_POSTFIELDS,http_build_query($datas));
     $res = curl_exec($ch);
     if(curl_error($ch)){
         var_dump(curl_error($ch));
@@ -32,236 +13,145 @@ function coding($method,$datas=[]){
         return json_decode($res);
     }
 }
-if(preg_match('/^\/([Ss]tart)/',$text)){
-coding('sendMessage',[
-    'chat_id'=>$chat_id,
-    'text'=>"😅 سلام $name ! به ربات تفریحی همه کاره خوش آمدید.",
-    'parse_mode'=>'html',
-   'reply_markup'=>json_encode([
-      'inline_keyboard'=>[
-	        [
-	        ['text'=>'😂 جوک','callback_data'=>'jock'],['text'=>'🗒 فال حافظ','callback_data'=>'fal']
-                ],
-		[
-		['text'=>'📜 حدیث','callback_data'=>'hadis'],['text'=>'❓آیا میدانید؟','callback_data'=>'am']
-                ],
-		[
-		['text'=>'🎈 ساعت و تاریخ','callback_data'=>'td'],['text'=>'🎐 پسورد رندوم','callback_data'=>'pass']
-                ],
-		[
-		['text'=>'ℹ️ راهنما','callback_data'=>'help'],['text'=>'👥 آمار ربات','callback_data'=>'amar']
-		]
-		 ]
-		])
-  ]);
+function rp($Number){
+$Rand = substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, $Number); 
+ return $Rand; 
 }
-elseif ($data == "menu") {
-  coding('editMessagetext',[
-    'chat_id'=>$chatid,
-	'message_id'=>$message_id,
-    'text'=>"🌹😜 به منوی اصلی خوش آمدید ! یکی از دکمه های زیر را انتخاب کید.",
-    'parse_mode'=>'html',
-   'reply_markup'=>json_encode([
-     'inline_keyboard'=>[
-	 [
-	        ['text'=>'😂 جوک','callback_data'=>'jock'],['text'=>'🗒 فال حافظ','callback_data'=>'fal']
-                ],
-		[
-		['text'=>'📜 حدیث','callback_data'=>'hadis'],['text'=>'❓آیا میدانید؟','callback_data'=>'am']
-                ],
-		[
-		['text'=>'🎈 ساعت و تاریخ','callback_data'=>'td'],['text'=>'🎐 پسورد رندوم','callback_data'=>'pass']
-                ],
-		[
-		['text'=>'ℹ️ راهنما','callback_data'=>'help'],['text'=>'👥 آمار ربات','callback_data'=>'amar']
-		]
-		 ]
-		])
-  ]);
+$update = json_decode(file_get_contents('php://input'));
+$text = $update->message->text;
+$chat_id = $update->message->chat->id;
+$inlineqt = $update->inline_query->query;
+$inlineqid = $update->inline_query->id;
+if($text == "/start"){
+    onyx('sendMessage',[
+        'chat_id'=>$chat_id,
+        'text'=>"سلام دوست من
+        
+        دستورات ربات :
+        <code>
+        /code [متن]
+        /bold [متن]
+        /italic [متن]
+        </code>
+        فرمت های متن :
+        <code>
+        [متن](لینک)
+        
+        *متن بلد*
+        
+        _متن ایتالیک_
+        
+        ```متن کد```
+        </code>
+        
+        فرمت های اینلاین
+        <code>
+        کارکتر شمار , متن بلد, متن ایتالیک, متن کد, ساخت بارکد:
+        @userbot [متن]
+        
+        ساخت پسورد رندم :
+        @userbot [عدد]
+        </code>",
+        'parse_mode'=>"HTML",
+        'reply_markup'=>json_encode(['inline_keyboard'=>[
+            [['text'=>'Switch Inline','switch_inline_query'=>'']]
+        ]])
+    ]);
+}elseif (preg_match('/^\/([Bb]old)/',$text)){
+    $strbold = str_replace("/bold","",$text);
+    onyx('sendMessage',[
+        'chat_id'=>$chat_id,
+        'text'=>"<b>".$strbold."</b>",
+        'parse_mode'=>"HTML"
+    ]);
+}elseif (preg_match('/^\/([Ii]talic)/',$text)){
+    $stritalic = str_replace("/italic","",$text);
+    onyx('sendMessage',[
+        'chat_id'=>$chat_id,
+        'text'=>"<i>".$stritalic."</i>",
+        'parse_mode'=>"HTML"
+    ]);
+}elseif (preg_match('/^\/([Cc]ode)/',$text)){
+    $strcode = str_replace("/code","",$text);
+    onyx('sendMessage',[
+        'chat_id'=>$chat_id,
+        'text'=>"<code>".$strcode."</code>",
+        'parse_mode'=>"HTML"
+    ]);
+}else{
+    onyx('sendMessage',[
+        'chat_id'=>$chat_id,
+        'text'=>$text,
+        'parse_mode'=>"Markdown"
+    ]);
 }
-elseif ($data == "td") {
-  coding('editMessagetext',[
-    'chat_id'=>$chatid,
-	'message_id'=>$message_id,
-    'text'=>"هم اکنون :
-⏰ ساعت : $time
-📆 تاریخ : $date",
-    'parse_mode'=>'html',
-   'reply_markup'=>json_encode([
-     'inline_keyboard'=>[
-	 [
-	 ['text'=>'🔄 بروزرسانی 🔄','callback_data'=>'td']
-         ],
-		[
-		['text'=>'🔙 برگشت به منو اصلی','callback_data'=>'menu']
-		]
-		 ]
-		])
-  ]);
+$strlen = mb_strlen($inlineqt, 'utf8');
+if($inlineqt == ""){
+    onyx('answerInlineQuery',[
+        'inline_query_id'=>$update->inline_query->id,
+        'switch_pm_parameter'=>'',
+        'switch_pm_text'=>"راهنما"
+    ]);
+}elseif(is_numeric($inlineqt) == "true"){
+  onyx('answerInlineQuery',[
+        'inline_query_id'=>$update->inline_query->id,
+        'switch_pm_parameter'=>'',
+        'switch_pm_text'=>"راهنما",
+        'results'=>json_encode([[
+            'type'=>'article',
+            'id'=>base64_encode(rand(5,555)),
+            'title'=>'Random Pass',
+            'input_message_content'=>['parse_mode'=>'HTML','message_text'=>"پسورد شما :
+            ".rp($inlineqt)],
+            'reply_markup'=>['inline_keyboard'=>[
+                [['text'=>'پسورد ساز','url'=>'https://telegram.me/shsbw828nnkooss']],
+                [['text'=>'Switch Inline','switch_inline_query'=>'12']]
+             ]]
+        ]])
+    ]);
+}else{ 
+onyx('answerInlineQuery',[
+        'inline_query_id'=>$update->inline_query->id,    
+        'switch_pm_parameter'=>'',
+        'switch_pm_text'=>"راهنما",
+        'results'=>json_encode([[
+            'type'=>'article',
+            'id'=>base64_encode(rand(5,555)),
+            'title'=>'Charcter  📝',
+            'input_message_content'=>['parse_mode'=>'HTML','message_text'=>"تعداد کارکتر 📝:
+            $strlen"],
+            'reply_markup'=>['inline_keyboard'=>[
+                [['text'=>'کارکتر شمار','url'=>'https://telegram.me/2y27w7hsidiskosss']],
+                [['text'=>'Switch Inline','switch_inline_query'=>'Message']]
+             ]]
+        ],[
+            'type'=>'article',
+            'id'=>base64_encode(rand(5,555)),
+            'title'=>'Bold',
+            'input_message_content'=>['parse_mode'=>'HTML','message_text'=>"<b>$inlineqt</b>"]
+        ],[
+            'type'=>'article',
+            'id'=>base64_encode(rand(5,555)),
+            'title'=>'Italic',
+            'input_message_content'=>['parse_mode'=>'HTML','message_text'=>"<i>$inlineqt</i>"]
+        ],[
+            'type'=>'article',
+            'id'=>base64_encode(rand(5,555)),
+            'title'=>'Code',
+            'input_message_content'=>['parse_mode'=>'HTML','message_text'=>"<code>$inlineqt</code>"]
+        ],[
+            'type'=>'photo',
+            'id'=>base64_encode(rand(5,555)),
+            'title'=>'QR Code',
+            'photo_url'=>"https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=$inlineqt&format=jpg",
+            'thumb_url'=>"https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=$inlineqt&format=jpg",
+            'description'=>"$inlineqt",
+            'caption'=>"
+            متن : $inlineqt",
+            'reply_markup'=>['inline_keyboard'=>[
+                [['text'=>'بارکد ساز','url'=>'https://telegram.me/hwjsb282h2isnw8sbskoss']],
+                [['text'=>'Switch Inline','switch_inline_query'=>'ْMessage']]
+             ]]
+        ]])
+    ]);
 }
-elseif ($data == "jock") {
-  coding('editMessagetext',[
-    'chat_id'=>$chatid,
-	'message_id'=>$message_id,
-    'text'=>"$jock",
-    'parse_mode'=>'html',
-   'reply_markup'=>json_encode([
-     'inline_keyboard'=>[
-	 [
-	 ['text'=>'🔄 دوباره 🔄','callback_data'=>'jock']
-         ],
-		[
-		['text'=>'🔙 برگشت به منو اصلی','callback_data'=>'menu']
-		]
-		 ]
-		])
-  ]);
-}
-elseif ($data == "hadis") {
-  coding('editMessagetext',[
-    'chat_id'=>$chatid,
-	'message_id'=>$message_id,
-    'text'=>"$hadis",
-    'parse_mode'=>'html',
-   'reply_markup'=>json_encode([
-     'inline_keyboard'=>[
-	 [
-	 ['text'=>'🔄 دوباره 🔄','callback_data'=>'hadis']
-         ],
-		[
-		['text'=>'🔙 برگشت به منو اصلی','callback_data'=>'menu']
-		]
-		 ]
-		])
-  ]);
-}
-elseif ($data == "am") {
-  coding('editMessagetext',[
-    'chat_id'=>$chatid,
-	'message_id'=>$message_id,
-    'text'=>"$am",
-    'parse_mode'=>'html',
-   'reply_markup'=>json_encode([
-     'inline_keyboard'=>[
-	 [
-	 ['text'=>'🔄 دوباره 🔄','callback_data'=>'am']
-         ],
-		[
-		['text'=>'🔙 برگشت به منو اصلی','callback_data'=>'menu']
-		]
-		 ]
-		])
-  ]);
-}
-elseif ($data == "pass") {
-  coding('editMessagetext',[
-    'chat_id'=>$chatid,
-	'message_id'=>$message_id,
-    'text'=>"📶 پسورد شما : <code>$pass</code>",
-    'parse_mode'=>'html',
-   'reply_markup'=>json_encode([
-     'inline_keyboard'=>[
-	 [
-	 ['text'=>'🔄 دوباره 🔄','callback_data'=>'pass']
-         ],
-		[
-		['text'=>'🔙 برگشت به منو اصلی','callback_data'=>'menu']
-		]
-		 ]
-		])
-  ]);
-}
-elseif ($data == "fal") {
-  coding('editMessagetext',[
-    'chat_id'=>$chatid,
-	'message_id'=>$message_id,
-    'text'=>"$fal",
-    'parse_mode'=>'html',
-   'reply_markup'=>json_encode([
-     'inline_keyboard'=>[
-	 [
-	 ['text'=>'🔄 دوباره 🔄','callback_data'=>'fal']
-         ],
-		[
-		['text'=>'🔙 برگشت به منو اصلی','callback_data'=>'menu']
-		]
-		 ]
-		])
-  ]);
-}
-elseif ($data == "amar") {
- $user = file_get_contents('members.txt');
-    $member_id = explode("\n",$user);
-    $member_count = count($member_id) -1;
-  coding('editMessagetext',[
-    'chat_id'=>$chatid,
-	'message_id'=>$message_id,
-    'text'=>"👥تعداد کاربران :
-<code>$member_count</code>",
-    'parse_mode'=>'html',
-   'reply_markup'=>json_encode([
-     'inline_keyboard'=>[
-	 [
-	 ['text'=>'🔄 بروزرسانی 🔄','callback_data'=>'amar']
-         ],
-		[
-		['text'=>'🔙 برگشت به منو اصلی','callback_data'=>'menu']
-		]
-		 ]
-		])
-  ]);
-}
-elseif ($data == "help") {
-  coding('editMessagetext',[
-    'chat_id'=>$chatid,
-	'message_id'=>$message_id,
-    'text'=>"ℹ️ راهنما :
-
-😂 جوک
-⬅️ دریافت جوک
-
-🗒 فال حافظ
-⬅️ دریافت فال
-
-📜 حدیث
-⬅️ دریافت حدیث
-
-❓آیا میدانید؟
-⬅️ دریافت آیا میدانید
-
-🎈 ساعت و تاریخ
-⬅️ دریافت ساعت و تاریخ
-
-🎐 پسورد رندوم
-⬅️ دریافت پسورد رندوم
-
-👥 آمار ربات
-⬅️ دریافت آمار ربات",
-    'parse_mode'=>'html',
-   'reply_markup'=>json_encode([
-     'inline_keyboard'=>[
-	 [
-		['text'=>'🔙 برگشت به منو اصلی','callback_data'=>'menu']
-		]
-		 ]
-		])
-  ]);
-}
-elseif(preg_match('آمار',$text) and $from_id == $admin){
-    $user = file_get_contents('members.txt');
-    $member_id = explode("\n",$user);
-    $member_count = count($member_id) -1;
-    coding('sendMessage',[
-      'chat_id'=>$chat_id,
-      'text'=>"تعداد کل اعضا: $member_count",
-      'parse_mode'=>'html'
-  ]);
-}unlink("error_log");
-$user = file_get_contents('members.txt');
-    $members = explode("\n",$user);
-    if (!in_array($chat_id,$members)){
-      $add_user = file_get_contents('members.txt');
-      $add_user .= $chat_id."\n";
-     file_put_contents('members.txt',$add_user);
-    }
-	?>
