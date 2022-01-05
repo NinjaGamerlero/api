@@ -210,9 +210,9 @@ if(in_array($save,$soundafter)){
   return;
   }
    $ob = json_decode($url);
-  bot("sendMessage",[
+  bot("sendAudio",[
       "chat_id"=>$chat_id,
-      "text"=>$ob,
+      "audio"=>audio,
       "reply_to_message_id"=>$message_id,
   ]);
   return;
