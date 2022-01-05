@@ -101,18 +101,19 @@ if(in_array($text,$sound)){
 
 
 if(in_array($save,$soundafter)){
-  $get = json_decode(file_get_contents("http://api-abaquran.aba.vg/handler.php?text=".urlencode($text)."&readernameEngilsh=Al_husari"));
-  if(isset($get->error)){
+  $get = file_get_contents("http://api-abaquran.aba.vg/handler.php?text=".urlencode($text)."&readernameEngilsh=Al_husari");
+  $ob = json_decode($ob);
+  if(isset($ob->error)){
     bot("sendMessage",[
       "chat_id"=>$chat_id,
-      "text"=>$get->error,
+      "text"=>$ob->error,
       "reply_to_message_id"=>$message_id,
   ]);
   return;
   }
   bot('sendaudio',[
     'chat_id' => $chat_id,
-    'audio' => $get->audio,
+    'audio' => $ob->audio,
     "reply_to_message_id"=>$message_id,
   ]);
   return;
