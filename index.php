@@ -1,20 +1,9 @@
 <?php
 
-/*  
-    * ملف بوت الباحث القرآني
-    * الإصدار الرابع
-    * الجديد  :
-    تم إضافة باحث صوتي 
-    ل 9 من القراء
-    
-    تمت برمجة هذه المشروع 
-    من قبل فريق
-    @api_tele
-*/
-
 ob_start();
 
-$API_KEY = "5019776526:AAEiZiHrfvICr6vcoNfv40rkLzUXYXLqRsQ"; //your token bot
+$API_KEY = "5019776526:AAEiZiHrfvICr6vcoNfv40rkLzUXYXLqRsQ";
+$site = "https://api-quran.cf";
 
 define("API_KEY",$API_KEY);
 function bot($method,$str=[]){
@@ -31,14 +20,116 @@ $chat_id = $message->chat->id;
 $text = $message->text;
 $message_id = $message->message_id;
 
-if($text){
-$url = file_get_contents("http://api-abaquran.aba.vg/handler.php?soura=$text&readernameEngilsh=Al_husari");
-   
-bot('sendMessage',[
-'chat_id'=>$chat_id,
-'text'=>$url
-]);
+$json = json_decode(file_get_contents("save.txt"),true);
+$getjson = json_decode(file_get_contents("save.txt"));
 
+$user = $getjson->$id;
+$save = $user->save;
+
+$sour = array("الوجه001","الوجه002","الوجه003","الوجه004","الوجه005","الوجه006","الوجه007","الوجه008","الوجه009","الوجه010","الوجه011","الوجه012","الوجه013","الوجه014","الوجه015","الوجه016","الوجه017","الوجه018","الوجه019","الوجه020","الوجه021","الوجه022","الوجه023","الوجه024","الوجه025","الوجه026","الوجه027","الوجه028","الوجه029","الوجه030","الوجه021","الوجه042","الوجه043","الوجه044","الوجه045","الوجه046","الوجه047","الوجه048","الوجه049","الوجه050",);
+
+
+// Search audio
+
+$sound = array(
+  "محمود الحصري",
+  "عودة",
+  );
+
+$soundafter = array(
+  "Al_husari",
+  );
+
+$soundsave = str_replace($sound, $soundafter, $text);
+
+//start
+
+if($text == "/start" or $text == "عودة"){
+  $json ["$id"]["save"] = "start";
+  file_put_contents("save.txt",json_encode($json));
+  bot("sendMessage",[
+    "chat_id"=>$chat_id,
+    "text"=>"Welcome to the quran pages search:
+    ",
+    "reply_to_message_id"=>$message_id,
+    "reply_markup"=>json_encode([
+      'keyboard'=>[
+          [['text'=>'بحث عن صفحات القران']],
+        ],
+        'resize_keyboard'=>true
+    ]),
+  ]);
+  return;
+}
+
+
+
+//Commands Search audio
+
+if($text == "بحث عن صفحات القران"){
+  foreach($sound as $key){
+    $keyboard[] = [$key];
+  }
+  bot("sendMessage",[
+    "chat_id"=>$chat_id,
+    "text"=>"
+حسنا ، اختر أحد القراء
+    ",
+    "reply_to_message_id"=>$message_id,
+    "reply_markup"=>json_encode([
+      'keyboard'=>$keyboard
+    ])
+  ]);
+  return;
+}
+
+if(in_array($text,$sound)){
+  $json ["$id"]["save"] = "$soundsave";
+  file_put_contents("save.txt",json_encode($json));
+  foreach($sour as $key){
+    $keyboard[] = [$key];
+  }
+  bot("sendMessage",[
+    "chat_id"=>$chat_id,
+    "text"=>"تم إختيار القارئ ، قم الآن بكتابة الصوحة أو قم بالإختيار من الكيبورد في الاسفل.",
+    "reply_to_message_id"=>$message_id,
+    "reply_markup"=>json_encode([
+      'keyboard'=>$keyboard
+    ])
+  ]);
+  return;
+}
+
+
+if(in_array($save,$soundafter)){
+  $get = json_decode(file_get_contents("http://api-abaquran.aba.vg/handler.php?soura=".urlencode($text)."&readernameEngilsh=Al_husari"));
+  if(isset($get->error)){
+    bot("sendMessage",[
+      "chat_id"=>$chat_id,
+      "text"=>$get->error,
+      "reply_to_message_id"=>$message_id,
+  ]);
+  return;
+  }
+  bot('sendaudio',[
+    'chat_id' => $chat_id,
+    'audio' => $get->audio,
+    "reply_to_message_id"=>$message_id,
+  ]);
+  return;
+}
+
+
+if($message){
+  bot("sendMessage",[
+    "chat_id"=>$chat_id,
+    "text"=>"
+لم أتمكن من فهم هذا الأمر ، يرجى إرسال
+
+/start
+    ",
+    "reply_to_message_id"=>$message_id,
+  ]);
 }
 
 ?>
