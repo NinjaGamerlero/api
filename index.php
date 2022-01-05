@@ -226,7 +226,7 @@ if(in_array($save,$soundafter)){
   }
   bot("sendaudio",[
     "chat_id" => $chat_id,
-    "audio" => $get->url,
+    "audio" => $get->audio,
     "caption"=>$get->caption,
     "reply_to_message_id"=>$message_id,
   ]);
