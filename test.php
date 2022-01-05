@@ -1,5 +1,5 @@
 <?php
-	define('API_KEY','**TOKEN**');
+	define('API_KEY','5067616910:AAH_zfSuzQIp75HiQUNd5pA7zFCPvihDVbc');
 	//----######------
 	
 	function makereq($method,$datas=[]){
