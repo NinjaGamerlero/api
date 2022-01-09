@@ -2,22 +2,23 @@
 
 ob_start();
 $API_KEY = '5021622888:AAGPxgHt9o8yNRt94NXrvgXmgFAURhNsSPE';
-define('API_KEY',$API_KEY);
-echo file_get_contents("https://api.telegram.org/bot" . API_KEY . "/setwebhook?url=" . $_SERVER['SERVER_NAME'] . "" . $_SERVER['SCRIPT_NAME']);
-function bot($method,$webhook=[]){
-$webhook = http_build_query($webhook);
-$url = "https://api.telegram.org/bot".API_KEY."/".$method."?$webhook";
-$webhook = file_get_contents($url);
-return json_decode($webhook);}
+
 
 $site = "https://api-quran.cf";
 
 define("API_KEY",$API_KEY);
+
 function bot($method,$str=[]){
         $http_build_query = http_build_query($str);
         $api = "https://api.telegram.org/bot".API_KEY."/".$method."?$http_build_query";
         $http_build_query = file_get_contents($api);
         return json_decode($http_build_query);
+        echo file_get_contents("https://api.telegram.org/bot".API_KEY. "/setwebhook?url=" . $_SERVER['SERVER_NAME'] . "" . $_SERVER['SCRIPT_NAME']);
+        function bot($method,$webhook=[]){
+        $webhook = http_build_query($webhook);
+        $url = "https://api.telegram.org/bot".API_KEY."/".$method."?$webhook";
+        $webhook = file_get_contents($url);
+        return json_decode($webhook);}
 }
 
 $update = json_decode(file_get_contents("php://input"));
