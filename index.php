@@ -32,12 +32,6 @@ $chat_id = $message->chat->id;
 $text = $message->text;
 $message_id = $message->message_id;
 
-$json = json_decode(file_get_contents("save.txt"),true);
-$getjson = json_decode(file_get_contents("save.txt"));
-
-$user = $getjson->$id;
-$save = $user->save;
-
 if($text){
    $get = file_get_contents("http://telegramlibrary.aba.vg/index.php");
    bot('sendaudio',[
