@@ -34,9 +34,10 @@ $message_id = $message->message_id;
 
 if($text){
    $get = file_get_contents("http://telegramlibrary.aba.vg/index.php");
+   $ob = json_encode($get);
    bot('sendaudio',[
     'chat_id' => $chat_id,
-    'audio' => $get->audio,
+    'audio' => $ob->audio,
     "reply_to_message_id"=>$message_id,
    ]);
 }
