@@ -40,7 +40,7 @@ $os = json_decode($ob);
 if($text){
    bot('sendaudio',[
     'chat_id' => $chat_id,
-    'audio' => $os->audio,
+    'audio' => "https://t.me/c/1776737849/2",
     "reply_to_message_id"=>$message_id,
    ]);
 }
