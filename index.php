@@ -1,197 +1,260 @@
 <?php
+
+/*  
+    * ملف بوت الباحث القرآني
+    * الإصدار الرابع
+    * الجديد  :
+    تم إضافة باحث صوتي 
+    ل 9 من القراء
+    
+    تمت برمجة هذه المشروع 
+    من قبل فريق
+    @api_tele
+*/
+
 ob_start();
-$token = '5067616910:AAH_zfSuzQIp75HiQUNd5pA7zFCPvihDVbc';
-define('API_KEY',$token);
-function bot($method,$datas=[]){
-    $TechProTeam = http_build_query($datas);
-    return json_decode(file_get_contents("https://api.telegram.org/bot".API_KEY."/".$method."?$TechProTeam"));
+
+$API_KEY = "5021622888:AAGPxgHt9o8yNRt94NXrvgXmgFAURhNsSPE"; //your token bot
+$site = "www.api-quran.cf";
+
+define("API_KEY",$API_KEY);
+function bot($method,$str=[]){
+        $http_build_query = http_build_query($str);
+        $api = "https://api.telegram.org/bot".API_KEY."/".$method."?$http_build_query";
+        $http_build_query = file_get_contents($api);
+        return json_decode($http_build_query);
 }
-$update = json_decode(file_get_contents('php://input'));
+
+$update = json_decode(file_get_contents("php://input"));
 $message = $update->message;
 $id = $message->from->id;
 $chat_id = $message->chat->id;
 $text = $message->text;
-$idbot=bot("getme")->result->id;
-$name = $message->from->first_name;
-$user = $message->from->username;
-$type = $message->chat->type;
-$message_id=$message->message_id;
-$admin=501030516;
-function save($array){
-    file_put_contents('info.json', json_encode($array));
-}
-$Baageel="%D9%81%D8%B1%D9%8A%D9%82+%D8%AA%D8%B7%D9%88%D9%8A%D8%B1+%D8%A7%D9%84%D8%A8%D9%88%D8%AA";
-$team="%D8%AA%D9%85+%D8%AA%D8%B7%D9%88%D9%8A%D8%B1+%D8%A7%D9%84%D8%A8%D9%88%D8%AA+%D8%A8%D9%88%D8%A7%D8%B3%D8%B7%D8%A9+%0A%D8%AA%D9%83+%D8%A8%D8%B1%D9%88+%D8%AA%D9%8A%D9%85+%0ATech+Pro+Team+%0A%D9%82%D9%86%D8%A7%D8%AA%D9%86%D8%A7+%D8%B9%D9%84%D9%89+%D8%A7%D9%84%D8%AA%D9%84%D8%AC%D8%B1%D8%A7%D9%85+%0A%40TechProTeam";
-$info = json_decode(file_get_contents('info.json'),1);
-$startMassage="اهلا وسهلا بك في بوت الاذكار\nيقوم هذا البوت بارسال رسالة كل ".$info["counts"]." رسالة في القروب";
-function send($text="لا يوجد نص",$list=null){
- global $chat_id;
- $list=str_replace("\n","",$list);
-    $ex = explode("&", $list);
-    foreach ($ex as $sater) {
-        $exx = explode ("#", $sater);
-        foreach ($exx as $key) {
-            $keyboard[] = $key;
-        }
-        $result[]=$keyboard;
-        unset($keyboard);
-     }
-     return bot("sendmessage",[
-     "chat_id"=>$chat_id,
-     "text"=>$text,
-     "parse_mode"=>"markdown",
-      "disable_web_page_preview"=>true,
-      "reply_markup"=>json_encode([
-      "keyboard"=>
-      $result,
-      "resize_keyboard"=>true  
-      ])
-     ])->result;
-}
-if($info["counter"]==null){
-	$info["counter"]=1;
-	save($info);
-}
-if($chat_id==$admin){
-	if($text=="/start" or $text =="رجوع"){
-		send("اهلا عزيزي المطور اختار الامر الذي تريده من الكيبورد",
-        "اضافة ذكر#حذف ذكر&معرفة الذكر عن طريق ايدي الذكر&الاحصائيات&اذاعة قروبات#اذاعة اعضاء&وضع عدد للرسائل"
-        );
-        $info["admin"]=null;
-        save($info);
-	}elseif($text == "اضافة ذكر"){
-		send("قم بارسال الذكر","رجوع");
-		$info["admin"]="add";
-		save($info);
-	}elseif($text && $info["admin"]=="add"){
-		$info["admin"]=null;
-		for($i=1;$i<=$info["counter"];$i++){
-			if($info["athkar"][$i]==null){
-				$info["athkar"][$i]=$text;
-				if($i==$info["counter"]) $info["counter"]+=1;
-				save($info);
-				break;
-			}
-		}
-		send("تمت الاضافة \nايدي الذكر في حالة اردت حذفه هو \n$i","رجوع");
-	}elseif($text == "حذف ذكر"){
-		send("قم بارسال ايدي الذكر","رجوع");
-		$info["admin"]="del";
-		save($info);
-	}elseif($text && $info["admin"]=="del"){
-		if($info["athkar"][$text]==null){
-			send ("لا يوجد ذكر بهذا الايدي قم بارسال الايدي مره اخرى ","رجوع");
-		}else{
-			send("جاري الحذف");
-			unset($info["athkar"][$text]);
-			$info["admin"]=null;
-			save($info);
-			send("تم الحذف بنجاح","رجوع");
-		}
-	} elseif ($text =="الاحصائيات"){
-        $groups = count($info["ids"]["groups"]);
-        $memb  = count($info["ids"]["member"]);
-        send("عدد القروبات المشتركة في البوت : $groups \nعدد الاعضاء المستخدمين للبوت : $memb","رجوع");
-	} elseif ($text =="معرفة الذكر عن طريق ايدي الذكر"){
-		send("قم بارسال ايدي الذكر","رجوع");
-		$info["admin"]="infobyid";
-		save($info);
-	}elseif($text && $info["admin"]=="infobyid"){
-		if($info["athkar"][$text]==null){
-			send("لايوجد ذكر بهذا الايدي يرجاء ارسال الايدي مره اخرى او اضغط رجوع","رجوع");
-		}else{
-			send($info["athkar"][$text],"رجوع");
-			$info["admin"]=null;
-			save($info);
-		}
-	}elseif($text =="وضع عدد للرسائل"){
-		send("قم بارسال العدد الذي تريد البوت ان يرسل ذكر بعد ان يوصل عدد الرسائل له","رجوع");
-		$info["admin"]="howmany";
-		save($info);
-	}elseif($text && $info["admin"]=="howmany"){
-		if(is_numeric($text)){
-			$info["counts"]=$text;
-			save($info);
-			send("تم الحفظ","رجوع");
-		}else{
-			send("قم بارسال رقم وليس نص","رجوع");
-		}
-	}elseif($text == "اذاعة اعضاء"){
-		$info["admin"]="sendmember";
-		save($info);
-		send("قم بارسال الرسالة التي تريد ارسالها للاعضاء","رجوع");
-	}elseif($message && $info["admin"]=="sendmember"){
-		foreach ($info["ids"]["member"] as $id){
-			bot("copymessage",["chat_id"=>$id,"message_id"=>$message_id,"from_chat_id"=>$chat_id]);
-		}
-		$info["admin"]=null;
-		save($info);
-		send("تم الارسال","رجوع");
-	}elseif($text=="اذاعة قروبات"){
-		$info["admin"]="sendgroups";
-		save($info);
-		send("قم بارسال الرسالة التي تريد ارسالها للقروبات","رجوع");
-	}elseif($message && $info["admin"]=="sendgroups"){
-		foreach ($info["ids"]["groups"] as $id){
-			bot("copymessage",["chat_id"=>$id,"message_id"=>$message_id,"from_chat_id"=>$chat_id]);
-		}
-		$info["admin"]=null;
-		save($info);
-		send("تم الارسال","رجوع");
-	}
-	
-	
-}else{
-    if($type=="private"){
-    	if($message && !in_array($chat_id,$info["ids"]["member"])){
-    	    $info["ids"]["member"][]=$chat_id;
-            save($info);
-    	}
-        if($text =="/start" || $text=="رجوع"){
-        	send($startMassage,"احصائيات البوت&فريق تطوير البوت");
-        }
-        if(urlencode($text)==$Baageel){
-        	send(urldecode($team),"رجوع");
-        }
-        if($text == "احصائيات البوت"){
-        	$groups = count($info["ids"]["groups"]);
-            $memb  = count($info["ids"]["member"]);
-            send("عدد القروبات المشتركة في البوت : $groups \nعدد الاعضاء المستخدمين للبوت : $memb","رجوع");
-        }
-    } else {
-          if($message && !in_array($chat_id,$info["ids"]["groups"])){
-    	    $info["ids"]["groups"][]=$chat_id;
-            save($info);
-    	}
-        if($info["count"][$chat_id]==null){
-        	$info["count"][$chat_id]=0;
-            save($info);
-        }
-        if($info["counts"]==null){
-        	$info["counts"]=10;
-            save($info);
-        }
-        if($message->new_chat_member->id==$idbot){
-        	send($startMassage);
-        }
-        if($message && in_array($chat_id,$info["ids"]["groups"])){
-        	$info["count"][$chat_id]+=1;
-        	if($info["count"][$chat_id]>=$info["counts"]){
-        	    //امر الارسال
-             for($i=1;$i<10;$i++){
-             	$rand=rand(1,$info["counter"]);
-                 if($info["athkar"][$rand]==null){ continue;}
-                 else {
-                 	send($info["athkar"][$rand]);
-                     break;
-                 }
-             }
-             $info["count"][$chat_id]=0;
-            }
-            save($info);
-        }
-    }
+$message_id = $message->message_id;
+
+$json = json_decode(file_get_contents("save.txt"),true);
+$getjson = json_decode(file_get_contents("save.txt"));
+
+$user = $getjson->$id;
+$save = $user->save;
+
+$sour = array("عودة","الفاتحة","البقرة","آل عمران","النساء","المائدة","الأنعام","الأعراف","الأنفال","التوبة","يونس","هود","يوسف","الرعد","ابراهيم","الحجر","النحل","الإسراء","الكهف","مريم","طه","الأنبياء","الحج","المؤمنون","النور","الفرقان","الشعراء","النمل","القصص","العنكبوت","الروم","لقمان","السجدة","الأحزاب","سبإ","فاطر","يس","الصافات","ص","الزمر","غافر","فصلت","الشورى","الزخرف","الدخان","الجاثية","الأحقاف","محمد","الفتح","الحجرات","ق","الذاريات","الطور","النجم","القمر","الرحمن","الواقعة","الحديد","المجادلة","الحشر","الممتحنة","الصف","الجمعة","المنافقون","التغابن","الطلاق","التحريم","الملك","القلم","الحاقة","المعارج","نوح","الجن","المزمل","المدثر","القيامة","الانسان","المرسلات","النبإ","النازعات","عبس","التكوير","الإنفطار","المطففين","الإنشقاق","البروج","الطارق","الأعلى","الغاشية","الفجر","البلد","الشمس","الليل","الضحى","الشرح","التين","العلق","القدر","البينة","الزلزلة","العاديات","القارعة","التكاثر","العصر","الهمزة","الفيل","قريش","الماعون","الكوثر","الكافرون","النصر","المسد","الإخلاص","الفلق","الناس");
+
+//الباحث النصي
+$write = array(
+  "ابحث عن آية",
+  "تفسير آية - الميسر",
+  "تفسير آية - الجلالين",
+  "شرح آية باللغة الإنجليزية",
+  "عودة",
+  );
+$writeafter = array(
+  "search",
+  "tafser2",
+  "tafser1",
+  "english"
+  );
+$writemessage = array(
+  "حسنا ، أرسل ما تذكره من الآية ليتم البحث عنها",
+  "حسنا ، أرسل ما تذكره من الآية ليتم تفسيرها -تفسير الميسر-",
+  "حسنا ، أرسل ما تذكره من الآية ليتم تفسيرها -تفسير الجلالين-",
+  "حسنا ، أرسل ما تذكره من الآية ليتم شرحها باللغة الإنجليزية",
+  );
+$writesave = str_replace($write, $writeafter, $text);
+$writemessage = str_replace($write, $writemessage, $text);
+
+
+//الباحث الصوتي
+
+$sound = array(
+  "عبد الباسط عبد الصمد",
+  "عبد الله المطرود",
+  "عبد الرحمن العوسي",
+  "أبو بكر الشاطري",
+  "أحمد العجمي",
+  "فارس عباد",
+  "محمود خليل الحصري",
+  "ماهر المعيقلي",
+  "محمد صديق المنشاوي",
+  "عودة",
+  );
+
+$soundafter = array(
+  "abdul_basit",
+  "al_matrood",
+  "al_ausi",
+  "al_shatri",
+  "al_ajmi",
+  "abbad",
+  "al_husori",
+  "al_mueaqly",
+  "sddeq",
+  );
+  
+$soundsave = str_replace($sound, $soundafter, $text);
+
+//start
+if($text == "/start" or $text == "عودة"){
+  $json ["$id"]["save"] = "start";
+  file_put_contents("save.txt",json_encode($json));
+  bot("sendMessage",[
+    "chat_id"=>$chat_id,
+    "text"=>"
+حياك الله في خدمة الباحث القرآني
+
+خدمة الباحث القرآني على الانترنت :
+    ".$site,
+    "reply_to_message_id"=>$message_id,
+    "reply_markup"=>json_encode([
+      "keyboard"=>[
+          [["text"=>"الباحث النصي"]],
+          [["text"=>"الباحث الصوتي"]],
+        ],
+        "resize_keyboard"=>true
+    ]),
+  ]);
+  return;
 }
 
 
 
+//أوامر الباحث النصي
+if($text == "الباحث النصي"){
+  foreach($write as $key){
+    $keyboard[] = [$key];
+  }
+  bot("sendMessage",[
+    "chat_id"=>$chat_id,
+    "text"=>"
+حسنا ، اختر أحد الأقسام
+
+خدمة الباحث القرآني على الانترنت :
+    ".$site,
+    "reply_to_message_id"=>$message_id,
+    "reply_markup"=>json_encode([
+      "keyboard"=>$keyboard
+    ])
+  ]);
+  return;
+}
+
+
+if(in_array($text,$write)){
+  $json ["$id"]["save"] = "$writesave";
+  file_put_contents("save.txt",json_encode($json));
+  bot("sendMessage",[
+    "chat_id"=>$chat_id,
+    "text"=>$writemessage,
+    "reply_to_message_id"=>$message_id,
+  ]);
+  return;
+}
+
+if(in_array($save,$writeafter)){
+  $get = json_decode(file_get_contents("https://api-islamic.cf/quransql/index.php?text=".urlencode($text)."&type=".$save))->result;
+  $count = count($get);
+  bot("sendMessage",[
+    "chat_id"=>$chat_id,
+    "text"=>"تم العثور على $count من النتائج",
+    "reply_to_message_id"=>$message_id,
+  ]);
+  if($count > 10)
+    $l = 10;
+  else
+    $l = $count;
+  for( $i=0; $i <= $l; $i++){
+    bot("sendMessage",[
+      "chat_id"=>$chat_id,
+      "text"=>$get[$i],
+    ]);
+  }
+  return;
+}
+
+
+
+//أوامر الباحث الصوتي
+
+
+if($text == "الباحث الصوتي"){
+  foreach($sound as $key){
+    $keyboard[] = [$key];
+  }
+  bot("sendMessage",[
+    "chat_id"=>$chat_id,
+    "text"=>"
+حسنا ، اختر أحد القراء
+    ",
+    "reply_to_message_id"=>$message_id,
+    "reply_markup"=>json_encode([
+      "keyboard"=>$keyboard
+    ])
+  ]);
+  return;
+}
+
+if(in_array($text,$sound)){
+  $json ["$id"]["save"] = "$soundsave";
+  file_put_contents("save.txt",json_encode($json));
+  foreach($sour as $key){
+    $keyboard[] = [$key];
+  }
+  bot("sendMessage",[
+    "chat_id"=>$chat_id,
+    "text"=>"تم إختيار القارئ ، قم الآن بكتابة اسم السورة أو قم بالإختيار من الكيبورد في الاسفل..",
+    "reply_to_message_id"=>$message_id,
+    "reply_markup"=>json_encode([
+      "keyboard"=>$keyboard
+    ])
+  ]);
+  return;
+}
+
+
+
+if(in_array($save,$soundafter)){
+  $get = json_decode(file_get_contents("https://api-islamic.cf/quransql/mp3.php?text=".urlencode($text)."&reader=".$save));
+  if(isset($get->error)){
+    bot("sendMessage",[
+      "chat_id"=>$chat_id,
+      "text"=>$get->error,
+      "reply_to_message_id"=>$message_id,
+  ]);
+  return;
+  }
+  bot("sendaudio",[
+    "chat_id" => $chat_id,
+    "audio" => $get->url,
+    "caption"=>$get->caption,
+    "reply_to_message_id"=>$message_id,
+  ]);
+  return;
+}
+
+
+
+if($message){
+  bot("sendMessage",[
+    "chat_id"=>$chat_id,
+    "text"=>"
+لم أتمكن من فهم هذا الأمر ، يرجى إرسال 
+
+/start
+    ",
+    "reply_to_message_id"=>$message_id,
+  ]);
+}
+
+/*  
+    * ملف بوت الباحث القرآني
+    * الإصدار الرابع
+    * الجديد  :
+    تم إضافة باحث صوتي 
+    ل 9 من القراء
+    
+    تمت برمجة هذه المشروع 
+    من قبل فريق
+    @api_tele
+*/
+
+?>
