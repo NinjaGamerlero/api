@@ -32,13 +32,12 @@ $chat_id = $message->chat->id;
 $text = $message->text;
 $message_id = $message->message_id;
 
+$ar = ['id' => '1','soura' => 'الوجه001','souraEnglish' => 'الفاتحة','audio' => 'https://t.me/c/1776737849/2','readername' => 'عبد الباسط عبد الصمد','readernameEngilsh' => 'abdul_basit','sort' => 'none'];
+
+$ob = json_decode($ar);
+
+$os = json_decode($ob);
 if($text){
-   $ar = ['id' => '1','soura' => 'الوجه001','souraEnglish' => 'الفاتحة','audio' => 'https://t.me/c/1776737849/2','readername' => 'عبد الباسط عبد الصمد','readernameEngilsh' => 'abdul_basit','sort' => 'none'];
-
-   $ob = json_decode($ar);
-
-   $os = json_decode($ob);
-
    bot('sendaudio',[
     'chat_id' => $chat_id,
     'audio' => $os->audio,
