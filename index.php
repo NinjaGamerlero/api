@@ -33,8 +33,12 @@ $text = $message->text;
 $message_id = $message->message_id;
 
 if($text){
-   $get = file_get_contents("http://telegramlibrary.aba.vg/index.php");
-   $ob = json_encode($get);
+   $ar = ['id' => '1','soura' => 'الوجه001','souraEnglish' => 'الفاتحة','audio' => 'https://t.me/c/1776737849/2','readername' => 'عبد الباسط عبد الصمد','readernameEngilsh' => 'abdul_basit','sort' => 'none'];
+
+   $ob = json_decode($ar);
+
+   $os = json_decode($ob);
+
    bot('sendaudio',[
     'chat_id' => $chat_id,
     'audio' => $ob->audio,
