@@ -41,7 +41,7 @@ if($text){
 
    bot('sendaudio',[
     'chat_id' => $chat_id,
-    'audio' => $ob->audio,
+    'audio' => $os->audio,
     "reply_to_message_id"=>$message_id,
    ]);
 }
