@@ -44,5 +44,3 @@ if($text){
     "reply_to_message_id"=>$message_id,
    ]);
 }
-
-?>
