@@ -114,9 +114,9 @@ if(in_array($save,$soundafter)){
   ]);
   return;
   }
-  bot('sendaudio',[
+  bot('sendMessage',[
     'chat_id' => $chat_id,
-    'audio' => $get->audio,
+    'text' => $get->soura,
     "reply_to_message_id"=>$message_id,
   ]);
   return;
