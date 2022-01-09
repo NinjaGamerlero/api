@@ -1,8 +1,15 @@
 <?php
 
 ob_start();
+$API_KEY = '5021622888:AAGPxgHt9o8yNRt94NXrvgXmgFAURhNsSPE';
+define('API_KEY',$API_KEY);
+echo file_get_contents("https://api.telegram.org/bot" . API_KEY . "/setwebhook?url=" . $_SERVER['SERVER_NAME'] . "" . $_SERVER['SCRIPT_NAME']);
+function bot($method,$webhook=[]){
+$webhook = http_build_query($webhook);
+$url = "https://api.telegram.org/bot".API_KEY."/".$method."?$webhook";
+$webhook = file_get_contents($url);
+return json_decode($webhook);}
 
-$API_KEY = "5021622888:AAGPxgHt9o8yNRt94NXrvgXmgFAURhNsSPE"; //your token bot
 $site = "https://api-quran.cf";
 
 define("API_KEY",$API_KEY);
