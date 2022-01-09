@@ -123,7 +123,7 @@ if(in_array($save,$soundafter)){
   }
   bot('sendAudio',[
     'chat_id' => $chat_id,
-    'audio' => $get->audio,
+    'audio' => $get,
     "reply_to_message_id"=>$message_id,
   ]);
   return;
