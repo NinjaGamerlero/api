@@ -213,7 +213,7 @@ if(in_array($text,$sound)){
 
 
 if(in_array($save,$soundafter)){
-  $get = json_decode(file_get_contents("http://telegramlibrary.aba.vg/index.php?souraEnglish=".urlencode($text)."&readernameEngilsh=".$save));
+  $get = json_decode(file_get_contents("http://telegramlibrary.aba.vg/index.php"));
   if(isset($get->error)){
     bot("sendMessage",[
       "chat_id"=>$chat_id,
